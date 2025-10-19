@@ -1,0 +1,13 @@
+# Archivos de caché y temporales de Visual Studio
+.vs/
+*.suo
+*.user
+*.pdb
+*.log
+
+# Carpetas de compilación y binarios
+[Bb]in/
+[Oo]bj/
+Debug/
+Release/
+ 
