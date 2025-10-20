@@ -19,18 +19,21 @@ builder.Services.AddScoped<ILoginRepositorio,LoginRepositorio>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngularApp", policy =>
-    {
-        policy.WithOrigins("https://localhost:4200")  // URL de tu aplicación Angular
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            // Reemplaza 4200 con el puerto de tu frontend (si es diferente)
+            policy.WithOrigins("http://localhost:4200",
+                               "https://localhost:4200")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
 });
 
 var app = builder.Build();
 
 // Usar CORS
-app.UseCors("AllowAngularApp");
+app.UseCors();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
