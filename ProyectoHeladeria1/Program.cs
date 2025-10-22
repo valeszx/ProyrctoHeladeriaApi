@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Proyecto_Heladeria.Data;
 using Proyecto_Heladeria.Repositorio;
 using Proyecto_Heladeria.Repositorio.IRepositorio;
+using ProyectoHeladeria1.Repositorio;
+using ProyectoHeladeria1.Repositorio.IRepositorio;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,7 @@ builder.Services.AddDbContext<AplicationDbContext>(opciones =>
                  opciones.UseSqlServer(builder.Configuration.GetConnectionString("conexionSQL")));
 				 
 builder.Services.AddScoped<ILoginRepositorio,LoginRepositorio>();
+builder.Services.AddScoped<IProductoRepositorio, ProductoRepositorio>();
 
 builder.Services.AddCors(options =>
 {

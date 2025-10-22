@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Proyecto_Heladeria.Modelo;
+using ProyectoHeladeria1.Modelo;
 
 namespace Proyecto_Heladeria.Data
 {
@@ -12,7 +13,7 @@ namespace Proyecto_Heladeria.Data
         }
         //sirve agregar las tablas DbSet
        public DbSet<Login> Logins { get; set; }
-
+       public DbSet<Producto> Productos { get; set; }
 
     }
 }
