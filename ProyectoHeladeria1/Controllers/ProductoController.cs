@@ -37,7 +37,7 @@ namespace ProyectoHeladeria1.Controllers
         }
 
         [HttpPost]
-        public IActionResult Agregar(Producto producto)
+        public IActionResult Agregar([FromBody] Producto producto)
         {
             var resultado = _productRepo.AgregarProducto(producto);
             return Ok(resultado);

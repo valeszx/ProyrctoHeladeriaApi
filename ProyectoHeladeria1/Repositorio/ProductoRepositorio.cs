@@ -20,6 +20,7 @@ namespace ProyectoHeladeria1.Repositorio
         public bool ActualizarProducto(Producto producto)
         {
             var actualizar = _context.Productos.Update(producto);
+            _context.SaveChanges();
             return actualizar != null;
         }
 
@@ -30,8 +31,9 @@ namespace ProyectoHeladeria1.Repositorio
         /// <returns></returns>
         public bool AgregarProducto(Producto producto)
         {
-            producto.FechaCreacion = new DateTime();
+            producto.FechaCreacion = DateTime.Now;
             var agregar = _context.Productos.Add(producto);
+            _context.SaveChanges();
             return agregar == null?false:true;
         }
 

@@ -11,6 +11,6 @@ namespace ProyectoHeladeria1.Modelo
         public int Cantidad { get; set; }
 
         public decimal Precio {  get; set; }
-        public DateTime FechaCreacion { get; set; }
+        public DateTime? FechaCreacion { get; set; }
     }
 }
