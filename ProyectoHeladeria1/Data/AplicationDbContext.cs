@@ -15,5 +15,7 @@ namespace Proyecto_Heladeria.Data
        public DbSet<Login> Logins { get; set; }
        public DbSet<Producto> Productos { get; set; }
 
+       public DbSet<Permiso> Permisos { get; set; }
+
     }
 }

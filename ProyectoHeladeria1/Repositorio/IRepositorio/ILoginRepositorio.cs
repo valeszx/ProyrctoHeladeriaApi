@@ -7,5 +7,7 @@ namespace Proyecto_Heladeria.Repositorio.IRepositorio
         //agregar los nombres de los metodos para el login
         ICollection<Login> GetLogins();
         bool ValidarLogin(string usuario, string password);
+
+        Login ObtenerUsuario(string usuario);
     }
 }

@@ -27,6 +27,14 @@ namespace ProyectoHeladeria1.Controllers
             return Ok(valido);
 
         }
-        
+
+        [HttpGet("{usuario}/obtenerUsuario")]
+        public IActionResult ObtenerUsuario(String usuario)
+        {
+            var valido = _repos.ObtenerUsuario(usuario);
+            return Ok(valido);
+
+        }
+
     }
 }

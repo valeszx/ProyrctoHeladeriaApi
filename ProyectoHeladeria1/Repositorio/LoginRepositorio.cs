@@ -19,6 +19,11 @@ namespace Proyecto_Heladeria.Repositorio
            return _context.Logins.ToList();
         }
 
+        public Login ObtenerUsuario(string usuario)
+        {
+            return _context.Logins.FirstOrDefault(x => x.Usuario == usuario);
+        }
+
         public bool ValidarLogin(string usuario, string password)
         {
             //validar si mi usuario y mi password estan incluidos en el Login
