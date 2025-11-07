@@ -19,9 +19,10 @@ namespace ProyectoHeladeria1.Repositorio
         /// <returns></returns>
         public bool ActualizarProducto(Producto producto)
         {
+            producto.FechaCreacion = DateTime.Now;
             var actualizar = _context.Productos.Update(producto);
             _context.SaveChanges();
-            return actualizar != null;
+            return actualizar == null?false:true;
         }
 
         /// <summary>
