@@ -42,5 +42,12 @@ namespace ProyectoHeladeria1.Controllers
             var resultado = _productRepo.AgregarProducto(producto);
             return Ok(resultado);
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult Eliminar(int id)
+        { 
+            var resultado = _productRepo.EliminarProducto(id);
+            return Ok(resultado);
+        }
     }
 }

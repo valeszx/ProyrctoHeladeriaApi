@@ -1,4 +1,5 @@
-﻿using Proyecto_Heladeria.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Proyecto_Heladeria.Data;
 using ProyectoHeladeria1.Modelo;
 using ProyectoHeladeria1.Repositorio.IRepositorio;
 
@@ -56,5 +57,20 @@ namespace ProyectoHeladeria1.Repositorio
         {
             return _context.Productos.ToList();
         }
+
+        /// <summary>
+        /// Se agrega el producto a la base de datos.
+        /// </summary>
+        /// <param name="producto"></param>
+        /// <returns></returns>
+        public bool EliminarProducto(int id)
+        {
+           
+            var producto = _context.Productos.FirstOrDefault(x => x.Id == id);
+            _context.Productos.Remove(producto);
+            _context.SaveChanges();
+            return producto == null ? false : true;
+        }
+
     }
 }

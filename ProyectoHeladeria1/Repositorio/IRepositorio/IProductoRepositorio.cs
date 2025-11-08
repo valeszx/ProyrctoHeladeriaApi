@@ -8,6 +8,7 @@ namespace ProyectoHeladeria1.Repositorio.IRepositorio
         bool AgregarProducto(Producto producto);
         bool ActualizarProducto(Producto producto);
         Producto GetProductoById(int id);
+        bool EliminarProducto(int id);
         
     }
 }
