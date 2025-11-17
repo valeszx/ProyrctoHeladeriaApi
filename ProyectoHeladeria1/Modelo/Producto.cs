@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProyectoHeladeria1.Modelo
 {
@@ -12,5 +13,7 @@ namespace ProyectoHeladeria1.Modelo
 
         public decimal Precio {  get; set; }
         public DateTime? FechaCreacion { get; set; }
+
+        public virtual ICollection<ProductoCategoria>? ProductoCategorias { get; set; }
     }
 }

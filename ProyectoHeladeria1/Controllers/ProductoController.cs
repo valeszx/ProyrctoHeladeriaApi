@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ProyectoHeladeria1.Dto;
 using ProyectoHeladeria1.Modelo;
 using ProyectoHeladeria1.Repositorio.IRepositorio;
 
@@ -37,7 +38,7 @@ namespace ProyectoHeladeria1.Controllers
         }
 
         [HttpPost]
-        public IActionResult Agregar([FromBody] Producto producto)
+        public IActionResult Agregar([FromBody] AgregarProductoCategoriaDto producto)
         {
             var resultado = _productRepo.AgregarProducto(producto);
             return Ok(resultado);

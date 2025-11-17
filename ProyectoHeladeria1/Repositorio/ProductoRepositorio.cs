@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Proyecto_Heladeria.Data;
+using ProyectoHeladeria1.Dto;
 using ProyectoHeladeria1.Modelo;
 using ProyectoHeladeria1.Repositorio.IRepositorio;
 
@@ -31,10 +32,27 @@ namespace ProyectoHeladeria1.Repositorio
         /// </summary>
         /// <param name="producto"></param>
         /// <returns></returns>
-        public bool AgregarProducto(Producto producto)
+        public bool AgregarProducto(AgregarProductoCategoriaDto producto)
         {
-            producto.FechaCreacion = DateTime.Now;
-            var agregar = _context.Productos.Add(producto);
+            var addProducto = new Producto
+            {
+                Nombre = producto.Nombre,
+                Descripcion = producto.Descripcion,
+                Cantidad = producto.Cantidad,
+                FechaCreacion = DateTime.Now,
+                Precio = producto.Precio,
+            };
+
+            var agregar = _context.Productos.Add(addProducto);
+            _context.SaveChanges();
+
+            var addProductoCategoria = new ProductoCategoria
+            {
+                IdProducto = addProducto.Id,
+                IdCategoria = producto.Categorias.Id
+            };
+
+            _context.ProductoCategorias.Add(addProductoCategoria);
             _context.SaveChanges();
             return agregar == null?false:true;
         }
@@ -53,9 +71,27 @@ namespace ProyectoHeladeria1.Repositorio
         /// Obtengo todos los productos de la BD.
         /// </summary>
         /// <returns></returns>
-        public ICollection<Producto> GetProductos()
+        public ICollection<ProductoCategoriaDto> GetProductos()
         {
-            return _context.Productos.ToList();
+            return _context.Productos
+        .Select(p => new ProductoCategoriaDto
+        {
+            // Mapeo de campos directos del Producto
+            Id = p.Id,
+            Nombre = p.Nombre,
+            Descripcion = p.Descripcion,
+            Precio = p.Precio,
+
+            // Mapeo de la lista de categorías
+            Categorias = p.ProductoCategorias
+                .Select(pc => new Categoria // pc es ProductoCategoria
+                {
+                    Id = pc.Categoria.Id,
+                    Nombre = pc.Categoria.Nombre
+                })
+                .ToList()
+        })
+        .ToList();
         }
 
         /// <summary>

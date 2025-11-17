@@ -14,9 +14,9 @@ namespace Proyecto_Heladeria.Data
         //sirve agregar las tablas DbSet
        public DbSet<Login> Logins { get; set; }
        public DbSet<Producto> Productos { get; set; }
-
        public DbSet<Permiso> Permisos { get; set; }
-        public DbSet<Categoria> Categorias { get; set; }
+       public DbSet<Categoria> Categorias { get; set; }
+       public DbSet<ProductoCategoria> ProductoCategorias { get; set; }
 
     }
 }
