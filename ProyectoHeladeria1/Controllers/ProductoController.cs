@@ -31,7 +31,7 @@ namespace ProyectoHeladeria1.Controllers
         }
 
         [HttpPut]
-        public IActionResult Actualizar(Producto producto)
+        public IActionResult Actualizar(ActualizarProductoCategoriaDto producto)
         {
             var resultado = _productRepo.ActualizarProducto(producto);
             return Ok(resultado);

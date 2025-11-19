@@ -19,11 +19,39 @@ namespace ProyectoHeladeria1.Repositorio
         /// </summary>
         /// <param name="producto"></param>
         /// <returns></returns>
-        public bool ActualizarProducto(Producto producto)
+        public bool ActualizarProducto(ActualizarProductoCategoriaDto producto)
         {
-            producto.FechaCreacion = DateTime.Now;
-            var actualizar = _context.Productos.Update(producto);
+            var productoActualizar = _context.Productos.FirstOrDefault(x => x.Id == producto.Id);
+            productoActualizar.FechaCreacion = DateTime.Now;
+            productoActualizar.Nombre = producto.Nombre;
+            productoActualizar.Descripcion = producto.Descripcion;
+            productoActualizar.Precio = producto.Precio;
+            productoActualizar.Cantidad = producto.Cantidad;
+            var actualizar = _context.Productos.Update(productoActualizar);
             _context.SaveChanges();
+
+            var addProductoCategoria = _context.ProductoCategorias.FirstOrDefault(x => x.Id == producto.Id);
+
+            //Si no existe agregar.
+            if(addProductoCategoria == null)
+            {
+                addProductoCategoria = new ProductoCategoria
+                {
+                    IdProducto = productoActualizar.Id,
+                    IdCategoria = producto.Categorias.Id
+                };
+
+                _context.ProductoCategorias.Add(addProductoCategoria);
+                _context.SaveChanges();
+            }
+            else
+            {
+                // sino actualizar
+                addProductoCategoria.IdCategoria = producto.Categorias.Id;
+                _context.ProductoCategorias.Update(addProductoCategoria);
+                _context.SaveChanges();
+            }
+           
             return actualizar == null?false:true;
         }
 
@@ -103,6 +131,14 @@ namespace ProyectoHeladeria1.Repositorio
         {
            
             var producto = _context.Productos.FirstOrDefault(x => x.Id == id);
+            var productoCategoria = _context.ProductoCategorias.Where(x => x.IdProducto == id).ToList();
+
+            foreach (var item in productoCategoria)
+            {
+                _context.ProductoCategorias.Remove(item);
+                _context.SaveChanges();
+            }
+
             _context.Productos.Remove(producto);
             _context.SaveChanges();
             return producto == null ? false : true;
