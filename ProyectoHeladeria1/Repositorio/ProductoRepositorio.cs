@@ -109,6 +109,7 @@ namespace ProyectoHeladeria1.Repositorio
             Nombre = p.Nombre,
             Descripcion = p.Descripcion,
             Precio = p.Precio,
+            Cantidad = p.Cantidad,
 
             // Mapeo de la lista de categorías
             Categorias = p.ProductoCategorias
