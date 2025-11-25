@@ -46,7 +46,7 @@ namespace ProyectoHeladeria1.Repositorio
         /// <returns></returns>
         public Categoria GetCategoriaById(int id)
         {
-            return _context.Categorias.Where(x => x.Id == id).FirstOrDefault();
+            return _context.Categorias.Where(x => x.Id == id).AsNoTracking().FirstOrDefault();
         }
 
         /// <summary>

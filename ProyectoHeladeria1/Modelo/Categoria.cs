@@ -11,6 +11,7 @@ namespace ProyectoHeladeria1.Modelo
         public string Nombre { get; set; }
         public DateTime? FechaCreacion { get; set; }
         public string TipoCategoria { get; set; }
+        public string? Ruta {  get; set; }
 
         public virtual ICollection<ProductoCategoria>? ProductoCategorias { get; set; }
     }
