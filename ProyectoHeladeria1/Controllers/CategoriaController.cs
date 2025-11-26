@@ -31,7 +31,7 @@ namespace ProyectoHeladeria1.Controllers
         }
 
         [HttpPut]
-        public IActionResult Actualizar([FromForm] Categoria categoria, IFormFile? imagen)
+        public async Task<IActionResult> Actualizar([FromForm] Categoria categoria, IFormFile? imagen)
         {
             var categoriaActual = _CatRepo.GetCategoriaById(categoria.Id);
             // 2. Manejo de la Imagen (Solo si se envió un nuevo archivo)
@@ -44,7 +44,7 @@ namespace ProyectoHeladeria1.Controllers
                 }
 
                 // b. Guardar la nueva imagen y obtener su ruta pública
-                string nuevaRuta = GuardarImagenEnServidor(imagen);
+                string nuevaRuta = await GuardarImagenEnServidor(imagen);
                 categoria.Ruta = nuevaRuta; // Asignar la nueva ruta
             }
 
@@ -53,7 +53,7 @@ namespace ProyectoHeladeria1.Controllers
         }
 
         [HttpPost]
-        public  IActionResult Agregar([FromForm] Categoria categoria, IFormFile imagen)
+        public async Task<IActionResult> Agregar([FromForm] Categoria categoria, IFormFile imagen)
         {
             if (imagen == null || imagen.Length == 0)
             {
@@ -62,7 +62,7 @@ namespace ProyectoHeladeria1.Controllers
 
             // 1. Guardar el Archivo en el Servidor
             // Esto es un ejemplo. Debes definir una ruta de guardado.
-            string rutaRelativa = GuardarImagenEnServidor(imagen);
+            string rutaRelativa = await GuardarImagenEnServidor(imagen);
             categoria.Ruta = rutaRelativa;
 
             var resultado = _CatRepo.AgregarCategoria(categoria);
@@ -77,7 +77,7 @@ namespace ProyectoHeladeria1.Controllers
         }
 
         // Ejemplo de función auxiliar para guardar la imagen (dentro del controlador o un servicio)
-        private string GuardarImagenEnServidor(IFormFile file)
+        private async Task<string> GuardarImagenEnServidor(IFormFile file)
         {
             // Reemplaza con tu lógica real de Path.
             var nombreUnico = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
@@ -93,7 +93,7 @@ namespace ProyectoHeladeria1.Controllers
 
             using (var stream = new FileStream(rutaCompleta, FileMode.Create))
             {
-                file.CopyToAsync(stream);
+                await file.CopyToAsync(stream);
             }
 
             // Retorna la ruta relativa que se usará para mostrar la imagen en el frontend
