@@ -8,6 +8,7 @@ namespace ProyectoHeladeria1.Repositorio.IRepositorio
         ICollection<ProductoCategoriaDto> GetProductos();
         bool AgregarProducto(AgregarProductoCategoriaDto producto);
         bool ActualizarProducto(ActualizarProductoCategoriaDto producto);
+        bool ActualizarCantidad(int id, int cantidad);
         Producto GetProductoById(int id);
         bool EliminarProducto(int id);
         

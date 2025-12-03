@@ -37,6 +37,13 @@ namespace ProyectoHeladeria1.Controllers
             return Ok(resultado);
         }
 
+        [HttpPut("{id}/{cantidad}")]
+        public IActionResult ActualizarCantidad(int id, int cantidad)
+        {
+            var resultado = _productRepo.ActualizarCantidad(id,cantidad);
+            return Ok(resultado);
+        }
+
         [HttpPost]
         public IActionResult Agregar([FromBody] AgregarProductoCategoriaDto producto)
         {

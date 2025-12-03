@@ -30,7 +30,7 @@ namespace ProyectoHeladeria1.Repositorio
             var actualizar = _context.Productos.Update(productoActualizar);
             _context.SaveChanges();
 
-            var addProductoCategoria = _context.ProductoCategorias.FirstOrDefault(x => x.Id == producto.Id);
+            var addProductoCategoria = _context.ProductoCategorias.FirstOrDefault(x => x.IdProducto == producto.Id);
 
             //Si no existe agregar.
             if(addProductoCategoria == null)
@@ -145,5 +145,14 @@ namespace ProyectoHeladeria1.Repositorio
             return producto == null ? false : true;
         }
 
+        public bool ActualizarCantidad(int id, int cantidad)
+        {
+            var producto = _context.Productos.Where(x => x.Id == id).FirstOrDefault();
+            producto.Cantidad = producto.Cantidad - cantidad;
+            _context.Productos.Update(producto);
+            _context.SaveChanges();
+
+            return true;
+        }
     }
 }
