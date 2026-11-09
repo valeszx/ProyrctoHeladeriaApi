@@ -22,6 +22,12 @@ builder.Services.AddScoped<IProductoRepositorio, ProductoRepositorio>();
 builder.Services.AddScoped<IPermisoRepositorio, PermisoRepositorio>();
 builder.Services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
 builder.Services.AddScoped<IProductoCategoriaRepositorio, ProductoCategoriaRepositorio>();
+builder.Services.AddScoped<ISaborRepositorio, SaborRepositorio>();
+builder.Services.AddScoped<IVentaRepositorio, VentaRepositorio>();
+builder.Services.AddScoped<ICompraRepositorio, CompraRepositorio>();
+builder.Services.AddScoped<IPerdidaRepositorio, PerdidaRepositorio>();
+builder.Services.AddScoped<IMovimientoRepositorio, MovimientoRepositorio>();
+builder.Services.AddScoped<INotificacionRepositorio, NotificacionRepositorio>();
 
 builder.Services.AddCors(options =>
 {

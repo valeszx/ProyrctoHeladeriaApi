@@ -13,6 +13,7 @@ namespace ProyectoHeladeria1.Modelo
 
         public decimal Precio {  get; set; }
         public DateTime? FechaCreacion { get; set; }
+        public int Disponible { get; set; }
 
         public virtual ICollection<ProductoCategoria>? ProductoCategorias { get; set; }
     }
