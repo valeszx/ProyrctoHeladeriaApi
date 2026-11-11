@@ -20,6 +20,13 @@ namespace ProyectoHeladeria1.Controllers
             return Ok(_saborRepo.GetSabores());
         }
 
+        /// <summary>Sabores que ofrece un producto (para el selector al vender).</summary>
+        [HttpGet("producto/{idProducto}")]
+        public IActionResult ObtenerPorProducto(int idProducto)
+        {
+            return Ok(_saborRepo.GetSaboresPorProducto(idProducto));
+        }
+
         [HttpGet("{id}")]
         public IActionResult ObtenerPorId(int id)
         {

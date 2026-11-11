@@ -11,6 +11,11 @@ namespace ProyectoHeladeria1.Dto
 
         public decimal Precio { get; set; }
 
+        public bool Disponible { get; set; } = true;
+
         public Categoria Categorias { get; set; }
+
+        /// <summary>Ids de los sabores del producto. Solo aplica si la categoria LlevaSabor. En actualizar, null = no cambiar.</summary>
+        public List<int>? SaboresIds { get; set; }
     }
 }

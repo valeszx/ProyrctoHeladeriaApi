@@ -12,5 +12,12 @@ namespace ProyectoHeladeria1.Dto
         public decimal Precio { get; set; }
 
         public List<Categoria> Categorias { get; set; }
+
+        public bool Disponible { get; set; }
+
+        /// <summary>true si alguna categoria del producto lleva sabor.</summary>
+        public bool LlevaSabor { get; set; }
+
+        public List<Sabor> Sabores { get; set; } = new();
     }
 }

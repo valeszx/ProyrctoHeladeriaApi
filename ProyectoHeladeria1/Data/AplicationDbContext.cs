@@ -18,6 +18,7 @@ namespace Proyecto_Heladeria.Data
        public DbSet<Categoria> Categorias { get; set; }
        public DbSet<ProductoCategoria> ProductoCategorias { get; set; }
        public DbSet<Sabor> Sabores { get; set; }
+       public DbSet<ProductoSabor> ProductoSabores { get; set; }
        public DbSet<Compra> Compras { get; set; }
        public DbSet<DetalleCompra> DetalleCompras { get; set; }
        public DbSet<Venta> Ventas { get; set; }

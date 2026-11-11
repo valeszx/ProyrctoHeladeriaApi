@@ -12,7 +12,7 @@ namespace ProyectoHeladeria1.Repositorio
         public const string TipoPerdida = "Perdida";
 
         /// <summary>
-        /// Suma (delta positivo) o resta (delta negativo) stock y
+        /// Suma (delta positivo) o resta (delta negativo) stock, pone Disponible en false si llega a 0 y
         /// crea una notificacion si queda por debajo del minimo. No hace SaveChanges.
         /// </summary>
         public static Producto AjustarStock(AplicationDbContext context, int idProducto, int delta)
@@ -26,6 +26,7 @@ namespace ProyectoHeladeria1.Repositorio
                     $"Stock insuficiente de '{producto.Nombre}': disponible {producto.Cantidad}, solicitado {-delta}.");
 
             producto.Cantidad = nuevo;
+            if (nuevo == 0) producto.Disponible = false; // sin stock no se puede vender
 
             if (delta < 0 && nuevo <= StockMinimo)
             {

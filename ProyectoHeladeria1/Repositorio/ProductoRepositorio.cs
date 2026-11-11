@@ -27,6 +27,7 @@ namespace ProyectoHeladeria1.Repositorio
             productoActualizar.Descripcion = producto.Descripcion;
             productoActualizar.Precio = producto.Precio;
             productoActualizar.Cantidad = producto.Cantidad;
+            productoActualizar.Disponible = producto.Disponible;
             var actualizar = _context.Productos.Update(productoActualizar);
             _context.SaveChanges();
 
@@ -51,7 +52,9 @@ namespace ProyectoHeladeria1.Repositorio
                 _context.ProductoCategorias.Update(addProductoCategoria);
                 _context.SaveChanges();
             }
-           
+
+            SincronizarSabores(productoActualizar.Id, producto.Categorias.Id, producto.SaboresIds);
+
             return actualizar == null?false:true;
         }
 
@@ -69,6 +72,7 @@ namespace ProyectoHeladeria1.Repositorio
                 Cantidad = producto.Cantidad,
                 FechaCreacion = DateTime.Now,
                 Precio = producto.Precio,
+                Disponible = producto.Disponible,
             };
 
             var agregar = _context.Productos.Add(addProducto);
@@ -82,7 +86,32 @@ namespace ProyectoHeladeria1.Repositorio
 
             _context.ProductoCategorias.Add(addProductoCategoria);
             _context.SaveChanges();
+
+            SincronizarSabores(addProducto.Id, producto.Categorias.Id, producto.SaboresIds);
             return agregar == null?false:true;
+        }
+
+        /// <summary>
+        /// Deja en el producto exactamente los sabores indicados. Solo aplica si la categoria
+        /// LlevaSabor; si no, se limpian. Si ids es null no se modifica nada.
+        /// </summary>
+        private void SincronizarSabores(int idProducto, int idCategoria, List<int>? ids)
+        {
+            if (ids == null) return;
+
+            var llevaSabor = _context.Categorias.Any(c => c.Id == idCategoria && c.LlevaSabor);
+            var deseados = llevaSabor
+                ? ids.Distinct().Where(id => _context.Sabores.Any(s => s.Id == id)).ToList()
+                : new List<int>();
+
+            var actuales = _context.ProductoSabores.Where(x => x.IdProducto == idProducto).ToList();
+            _context.ProductoSabores.RemoveRange(actuales.Where(x => !deseados.Contains(x.IdSabor)));
+
+            foreach (var idSabor in deseados.Where(id => actuales.All(x => x.IdSabor != id)))
+            {
+                _context.ProductoSabores.Add(new ProductoSabor { IdProducto = idProducto, IdSabor = idSabor });
+            }
+            _context.SaveChanges();
         }
 
         /// <summary>
@@ -110,14 +139,21 @@ namespace ProyectoHeladeria1.Repositorio
             Descripcion = p.Descripcion,
             Precio = p.Precio,
             Cantidad = p.Cantidad,
+            Disponible = p.Disponible,
+            LlevaSabor = p.ProductoCategorias.Any(pc => pc.Categoria.LlevaSabor),
 
             // Mapeo de la lista de categorías
             Categorias = p.ProductoCategorias
                 .Select(pc => new Categoria // pc es ProductoCategoria
                 {
                     Id = pc.Categoria.Id,
-                    Nombre = pc.Categoria.Nombre
+                    Nombre = pc.Categoria.Nombre,
+                    LlevaSabor = pc.Categoria.LlevaSabor
                 })
+                .ToList(),
+
+            Sabores = p.ProductoSabores
+                .Select(ps => new Sabor { Id = ps.Sabor.Id, Nombre = ps.Sabor.Nombre })
                 .ToList()
         })
         .ToList();

@@ -32,8 +32,7 @@ namespace ProyectoHeladeria1.Repositorio
             foreach (var d in dto.Detalles)
             {
                 InventarioHelper.ValidarCantidad(d.Cantidad);
-                if (d.IdSabor != null && !_context.Sabores.Any(s => s.Id == d.IdSabor))
-                    throw new InvalidOperationException($"El sabor {d.IdSabor} no existe.");
+                ValidarSabor(d);
 
                 var producto = InventarioHelper.AjustarStock(_context, d.IdProducto, -d.Cantidad);
                 venta.Detalles.Add(new DetalleVenta
@@ -61,6 +60,23 @@ namespace ProyectoHeladeria1.Repositorio
             _context.SaveChanges();
             tx.Commit();
             return venta.IdVenta;
+        }
+
+        /// <summary>El sabor es obligatorio si el producto tiene sabores y debe ser uno de ellos.</summary>
+        private void ValidarSabor(AgregarDetalleVentaDto d)
+        {
+            var saboresProducto = _context.ProductoSabores
+                .Where(x => x.IdProducto == d.IdProducto).Select(x => x.IdSabor).ToList();
+
+            if (d.IdSabor == null)
+            {
+                if (saboresProducto.Count > 0)
+                    throw new InvalidOperationException("Debe seleccionar un sabor para este producto.");
+                return;
+            }
+
+            if (!saboresProducto.Contains(d.IdSabor.Value))
+                throw new InvalidOperationException("El sabor seleccionado no esta disponible para este producto.");
         }
 
         private static IQueryable<VentaDto> Proyectar(IQueryable<Venta> q) =>

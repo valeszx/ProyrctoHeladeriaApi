@@ -22,6 +22,15 @@ namespace ProyectoHeladeria1.Repositorio
             return _context.Sabores.FirstOrDefault(x => x.Id == id);
         }
 
+        public ICollection<Sabor> GetSaboresPorProducto(int idProducto)
+        {
+            return _context.ProductoSabores
+                .Where(x => x.IdProducto == idProducto)
+                .Select(x => new Sabor { Id = x.Sabor.Id, Nombre = x.Sabor.Nombre })
+                .OrderBy(x => x.Nombre)
+                .ToList();
+        }
+
         public bool AgregarSabor(Sabor sabor)
         {
             _context.Sabores.Add(new Sabor { Nombre = sabor.Nombre });
