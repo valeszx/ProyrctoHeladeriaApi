@@ -44,11 +44,17 @@ namespace ProyectoHeladeria1.Dto
         public List<AgregarDetalleCompraDto> Detalles { get; set; } = new();
     }
 
+    /// <summary>Una linea de compra: envia idProducto O idInsumo (no ambos).</summary>
     public class AgregarDetalleCompraDto
     {
-        public int IdProducto { get; set; }
+        public int? IdProducto { get; set; }
+        public int? IdInsumo { get; set; }
+        /// <summary>Presentaciones compradas (ej. 2 bolsas).</summary>
         public int Cantidad { get; set; }
+        /// <summary>Costo de cada presentacion.</summary>
         public decimal CostoUnitario { get; set; }
+        /// <summary>Solo insumos: unidades por presentacion (ej. 50). Si no se envia se usa la del insumo.</summary>
+        public int? UnidadesPorPresentacion { get; set; }
     }
 
     public class CompraDto
@@ -64,9 +70,12 @@ namespace ProyectoHeladeria1.Dto
     public class DetalleCompraDto
     {
         public int IdDetalleCompra { get; set; }
-        public int IdProducto { get; set; }
+        public int? IdProducto { get; set; }
         public string? Producto { get; set; }
+        public int? IdInsumo { get; set; }
+        public string? Insumo { get; set; }
         public int Cantidad { get; set; }
+        public int? UnidadesPorPresentacion { get; set; }
         public decimal CostoUnitario { get; set; }
     }
 
@@ -95,13 +104,15 @@ namespace ProyectoHeladeria1.Dto
     public class MovimientoDto
     {
         public int IdMovimiento { get; set; }
-        public int IdProducto { get; set; }
+        public int? IdProducto { get; set; }
         public string? Producto { get; set; }
+        public int? IdInsumo { get; set; }
+        public string? Insumo { get; set; }
         public int? IdVenta { get; set; }
         public int? IdCompra { get; set; }
         public int? IdPerdida { get; set; }
         public string Tipo { get; set; } = "";
-        public int Cantidad { get; set; }
+        public decimal Cantidad { get; set; }
         public DateTime Fecha { get; set; }
     }
 
@@ -109,10 +120,23 @@ namespace ProyectoHeladeria1.Dto
     public class NotificacionDto
     {
         public int IdNotificacion { get; set; }
-        public int IdProducto { get; set; }
+        public int? IdProducto { get; set; }
         public string? Producto { get; set; }
+        public int? IdInsumo { get; set; }
+        public string? Insumo { get; set; }
         public string Mensaje { get; set; } = "";
         public DateTime Fecha { get; set; }
         public bool Atendida { get; set; }
+    }
+
+    // ---------- Recetas ----------
+    /// <summary>Una linea de la receta de un producto.</summary>
+    public class RecetaItemDto
+    {
+        public int IdInsumo { get; set; }
+        public string? Insumo { get; set; }
+        public string? Unidad { get; set; }
+        /// <summary>Unidades de insumo que consume UNA unidad vendida del producto.</summary>
+        public decimal Cantidad { get; set; }
     }
 }

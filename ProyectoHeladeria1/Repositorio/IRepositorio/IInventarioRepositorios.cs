@@ -1,4 +1,5 @@
 using ProyectoHeladeria1.Dto;
+using ProyectoHeladeria1.Modelo;
 
 namespace ProyectoHeladeria1.Repositorio.IRepositorio
 {
@@ -25,7 +26,19 @@ namespace ProyectoHeladeria1.Repositorio.IRepositorio
 
     public interface IMovimientoRepositorio
     {
-        ICollection<MovimientoDto> GetMovimientos(int? idProducto, string? tipo, DateTime? desde, DateTime? hasta);
+        ICollection<MovimientoDto> GetMovimientos(int? idProducto, int? idInsumo, string? tipo, DateTime? desde, DateTime? hasta);
+    }
+
+    public interface IInsumoRepositorio
+    {
+        ICollection<Insumo> GetInsumos(bool incluirInactivos);
+        Insumo? GetInsumoById(int id);
+        int AgregarInsumo(Insumo insumo);
+        bool ActualizarInsumo(Insumo insumo);
+        bool EliminarInsumo(int id);
+
+        ICollection<RecetaItemDto> GetReceta(int idProducto);
+        void GuardarReceta(int idProducto, List<RecetaItemDto> receta);
     }
 
     public interface INotificacionRepositorio

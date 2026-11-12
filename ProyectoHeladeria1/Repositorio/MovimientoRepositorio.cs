@@ -10,10 +10,11 @@ namespace ProyectoHeladeria1.Repositorio
         private readonly AplicationDbContext _context;
         public MovimientoRepositorio(AplicationDbContext context) { _context = context; }
 
-        public ICollection<MovimientoDto> GetMovimientos(int? idProducto, string? tipo, DateTime? desde, DateTime? hasta)
+        public ICollection<MovimientoDto> GetMovimientos(int? idProducto, int? idInsumo, string? tipo, DateTime? desde, DateTime? hasta)
         {
             var q = _context.Movimientos.AsNoTracking().AsQueryable();
             if (idProducto != null) q = q.Where(m => m.IdProducto == idProducto);
+            if (idInsumo != null) q = q.Where(m => m.IdInsumo == idInsumo);
             if (!string.IsNullOrWhiteSpace(tipo)) q = q.Where(m => m.Tipo == tipo);
             if (desde != null) q = q.Where(m => m.Fecha >= desde);
             if (hasta != null) q = q.Where(m => m.Fecha <= hasta);
@@ -22,7 +23,9 @@ namespace ProyectoHeladeria1.Repositorio
             {
                 IdMovimiento = m.IdMovimiento,
                 IdProducto = m.IdProducto,
-                Producto = m.Producto.Nombre,
+                Producto = m.Producto != null ? m.Producto.Nombre : null,
+                IdInsumo = m.IdInsumo,
+                Insumo = m.Insumo != null ? m.Insumo.Nombre : null,
                 IdVenta = m.IdVenta,
                 IdCompra = m.IdCompra,
                 IdPerdida = m.IdPerdida,

@@ -19,7 +19,9 @@ namespace ProyectoHeladeria1.Repositorio
             {
                 IdNotificacion = n.IdNotificacion,
                 IdProducto = n.IdProducto,
-                Producto = n.Producto.Nombre,
+                Producto = n.Producto != null ? n.Producto.Nombre : null,
+                IdInsumo = n.IdInsumo,
+                Insumo = n.Insumo != null ? n.Insumo.Nombre : null,
                 Mensaje = n.Mensaje,
                 Fecha = n.Fecha,
                 Atendida = n.Atendida

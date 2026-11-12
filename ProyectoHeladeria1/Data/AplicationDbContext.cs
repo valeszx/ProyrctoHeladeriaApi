@@ -19,6 +19,8 @@ namespace Proyecto_Heladeria.Data
        public DbSet<ProductoCategoria> ProductoCategorias { get; set; }
        public DbSet<Sabor> Sabores { get; set; }
        public DbSet<ProductoSabor> ProductoSabores { get; set; }
+       public DbSet<Insumo> Insumos { get; set; }
+       public DbSet<ProductoInsumo> ProductoInsumos { get; set; }
        public DbSet<Compra> Compras { get; set; }
        public DbSet<DetalleCompra> DetalleCompras { get; set; }
        public DbSet<Venta> Ventas { get; set; }
@@ -41,7 +43,7 @@ namespace Proyecto_Heladeria.Data
             };
 
             // En la BD "cantidad" es decimal(10,2); en el codigo se maneja como int.
-            foreach (var tipo in new[] { typeof(DetalleCompra), typeof(DetalleVenta), typeof(Perdida), typeof(Movimiento) })
+            foreach (var tipo in new[] { typeof(DetalleCompra), typeof(DetalleVenta), typeof(Perdida) })
             {
                 modelBuilder.Entity(tipo).Property("Cantidad").HasConversion<decimal>().HasColumnType("decimal(10,2)");
             }

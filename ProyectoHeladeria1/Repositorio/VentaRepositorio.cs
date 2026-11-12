@@ -29,12 +29,41 @@ namespace ProyectoHeladeria1.Repositorio
             var venta = new Venta { IdUsuario = dto.IdUsuario, Fecha = DateTime.Now, Detalles = new List<DetalleVenta>() };
             _context.Ventas.Add(venta);
 
+            var movimientos = new List<Movimiento>();
+
             foreach (var d in dto.Detalles)
             {
                 InventarioHelper.ValidarCantidad(d.Cantidad);
                 ValidarSabor(d);
 
-                var producto = InventarioHelper.AjustarStock(_context, d.IdProducto, -d.Cantidad);
+                var producto = _context.Productos.FirstOrDefault(x => x.Id == d.IdProducto)
+                    ?? throw new InvalidOperationException($"El producto {d.IdProducto} no existe.");
+
+                // Siempre se descuenta la Cantidad del producto...
+                InventarioHelper.AjustarStock(_context, d.IdProducto, -d.Cantidad);
+                movimientos.Add(new Movimiento
+                {
+                    IdProducto = d.IdProducto,
+                    Tipo = InventarioHelper.TipoVenta,
+                    Cantidad = d.Cantidad,
+                    Fecha = venta.Fecha
+                });
+
+                // ...y ademas los insumos de su receta (vaso, pajilla, cono...), si tiene.
+                var receta = _context.ProductoInsumos.Where(r => r.IdProducto == d.IdProducto).ToList();
+                foreach (var r in receta)
+                {
+                    var consumo = r.Cantidad * d.Cantidad;
+                    InventarioHelper.AjustarStockInsumo(_context, r.IdInsumo, -consumo);
+                    movimientos.Add(new Movimiento
+                    {
+                        IdInsumo = r.IdInsumo,
+                        Tipo = InventarioHelper.TipoVenta,
+                        Cantidad = consumo,
+                        Fecha = venta.Fecha
+                    });
+                }
+
                 venta.Detalles.Add(new DetalleVenta
                 {
                     IdProducto = d.IdProducto,
@@ -46,16 +75,10 @@ namespace ProyectoHeladeria1.Repositorio
             venta.Total = venta.Detalles.Sum(x => x.Cantidad * x.PrecioUnitario);
             _context.SaveChanges(); // genera IdVenta
 
-            foreach (var d in venta.Detalles)
+            foreach (var m in movimientos)
             {
-                _context.Movimientos.Add(new Movimiento
-                {
-                    IdProducto = d.IdProducto,
-                    IdVenta = venta.IdVenta,
-                    Tipo = InventarioHelper.TipoVenta,
-                    Cantidad = d.Cantidad,
-                    Fecha = venta.Fecha
-                });
+                m.IdVenta = venta.IdVenta;
+                _context.Movimientos.Add(m);
             }
             _context.SaveChanges();
             tx.Commit();

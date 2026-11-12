@@ -48,6 +48,42 @@ namespace ProyectoHeladeria1.Repositorio
             return producto;
         }
 
+        /// <summary>
+        /// Suma o resta unidades de un insumo. Rechaza si no alcanza y genera una alerta cuando
+        /// el stock queda en el StockMinimo del insumo o menos. No hace SaveChanges.
+        /// </summary>
+        public static Insumo AjustarStockInsumo(AplicationDbContext context, int idInsumo, decimal delta)
+        {
+            var insumo = context.Insumos.FirstOrDefault(x => x.Id == idInsumo)
+                ?? throw new InvalidOperationException($"El insumo {idInsumo} no existe.");
+
+            var nuevo = insumo.Stock + delta;
+            if (nuevo < 0)
+                throw new InvalidOperationException(
+                    $"Insumo insuficiente '{insumo.Nombre}': quedan {insumo.Stock:0.##}, se necesitan {-delta:0.##}.");
+
+            insumo.Stock = nuevo;
+
+            if (delta < 0 && nuevo <= insumo.StockMinimo)
+            {
+                var pendiente = context.Notificaciones.Any(n => n.IdInsumo == idInsumo && !n.Atendida)
+                    || context.Notificaciones.Local.Any(n => n.IdInsumo == idInsumo && !n.Atendida);
+                if (!pendiente)
+                {
+                    context.Notificaciones.Add(new Notificacion
+                    {
+                        IdInsumo = idInsumo,
+                        Mensaje = nuevo == 0
+                            ? $"El insumo '{insumo.Nombre}' se agoto."
+                            : $"Quedan {nuevo:0.##} {insumo.Unidad} de '{insumo.Nombre}'.",
+                        Fecha = DateTime.Now,
+                        Atendida = false
+                    });
+                }
+            }
+            return insumo;
+        }
+
         public static void ValidarCantidad(int cantidad)
         {
             if (cantidad <= 0) throw new InvalidOperationException("La cantidad debe ser mayor a cero.");
