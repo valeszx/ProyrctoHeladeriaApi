@@ -72,8 +72,15 @@ namespace ProyectoHeladeria1.Controllers
         [HttpDelete("{id}")]
         public IActionResult Eliminar(int id)
         { 
-            var resultado = _CatRepo.EliminarCategoria(id);
-            return Ok(resultado);
+            try
+            {
+                var resultado = _CatRepo.EliminarCategoria(id);
+                return resultado ? Ok(true) : NotFound();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
         }
 
         // Ejemplo de función auxiliar para guardar la imagen (dentro del controlador o un servicio)

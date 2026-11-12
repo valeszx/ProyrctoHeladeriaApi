@@ -67,9 +67,18 @@ namespace ProyectoHeladeria1.Repositorio
         {
            
             var categoria = _context.Categorias.FirstOrDefault(x => x.Id == id);
+            if (categoria == null) return false;
+
+            // La FK ProductoCategoria -> Categoria no tiene cascada: no se puede borrar una categoria con productos.
+            var productos = _context.ProductoCategorias.Count(x => x.IdCategoria == id);
+            if (productos > 0)
+                throw new InvalidOperationException(
+                    $"No se puede eliminar la categoria '{categoria.Nombre}' porque tiene {productos} producto(s) asociado(s). " +
+                    "Cambia la categoria de esos productos primero.");
+
             _context.Categorias.Remove(categoria);
             _context.SaveChanges();
-            return categoria == null ? false : true;
+            return true;
         }
 
     }
